@@ -20,7 +20,7 @@ async function openClosePort(event) {
         button.classList.add('active')
         //button.style.background = "#008080";
 
-        posAngleShow('open');
+        //posAngleShow('open');
         /*} else {
             button.textContent = 'Nope';
             button.style.background="#108080";
@@ -162,8 +162,6 @@ function moveAbit(button, direction) {
     } else {
         sendMsg('mi ' + 10 * mm2ticks); // Move down
     }
-
-    sendMsg(message);
 }
 
 function sendPosCommand() {
@@ -174,7 +172,7 @@ function sendPosCommand() {
     }
 
     sendMsg('ma ' + mm2ticks * document.getElementById('valueInput').value); // Move to position
-    setBeePosition(pos);
+    //setBeePosition(pos);
 }
 
 
@@ -188,6 +186,7 @@ function homing(button) {
     sendMsg('k');           // Disable motors
     sendMsg('opmode 4');    // Mode 4: Homing
     sendMsg('en');          // Enable motors   
+    sendMsg('home');        // Start homing    
 
     document.getElementById('valueInput').value = '0';
     setBeePosition(0);
@@ -201,7 +200,9 @@ function runMCT(button) {
     }
 
     sendMsg('k');           // Disable motors
-    sendMsg('opmode 6');    // Mode 5: Sine wave
+    sendMsg('opmode 6');    // Mode 6: MCT
+    sendMsg('mtamp 1024')
+    sendMsg('mtfreq 90')
     sendMsg('en');          // Enable motors
     sendMsg('mstart 1');      // Run MCT
 }
@@ -213,9 +214,15 @@ function sineShake(button) {
         motorState( document.getElementById('motorOnButton') );
     }
 
-    sendMsg('k');           // Disable motors
+    //sendMsg('k');           // Disable motors
     sendMsg('opmode 5');    // Mode 5: Sine wave
-    sendMsg('en');          // Enable motors
+    //sendMsg('en');          // Enable motors
+    sendMsg('samp 8000');
+    sendMsg('sfreq 60');
+    new Promise(resolve => setTimeout(resolve, 300)).then(() => {
+        sendMsg('Shake 3000');
+    });
+    sendMsg('Shake 3000');
 }
 
 
@@ -375,21 +382,33 @@ async function posAngleShow(state) {
         console.log("Start show pos command interval");
         intervalShowPos = setInterval(() => {
             setPosBoxes();
-        }, 10);
+        }, 1000);
     }
 }
 
 async function setPosBoxes() {
     let pos = await readMsg('pfb');
-    updateInputValue('input-position', pos, 1/mm2ticks);
+    updateInputValue('input-position', pos, mm2ticks);
     let vel = await readMsg('vfb');
-    updateInputValue('input-velociy', vel, 1/mm2ticks);
+    updateInputValue('input-velociy', vel, mm2ticks);
     let cur = await readMsg('i');
     updateInputValue('input-current', cur);
 }
 
 async function readMsg(message) {
     // Send the message
+    //await reader.read();
+    // async function clearReaderBuffer() {
+    //     for (let i = 0; i < 3; i++) {
+    //         const { value, done } = await reader.read();
+    //         if (done) {
+    //             break;
+    //         }
+    //     }
+    // }
+
+    // await clearReaderBuffer();
+    message = message// + '\r';
     await sendMsg(message);
   
     // Initialize the reader for the serial port
@@ -398,11 +417,13 @@ async function readMsg(message) {
     try {
       // Read data from the serial port
       const { value, done } = await reader.read();
-  
+      
       if (value) {
         // Convert Uint8Array to string and process the response
         const decodedValue = new TextDecoder().decode(value);
-        const response = removeCommand(message, decodedValue);
+        const response = decodedValue.split('\r')[0];
+        //const response = decodedValue; //removeCommand(message, decodedValue);
+        console.log(response);
         return response; // Return the processed response
       } else {
         console.warn("No data received or connection closed.");
@@ -482,11 +503,11 @@ const bee = document.getElementById("bee");
 const input = document.getElementById("valueInput");
 const sliderFill = document.getElementById("sliderFill");
 const sliderHeight = 300;
-let min = 0, max = 400;
+let min = 0, max = 240;
 
 function setBeePosition(value) {
     let percentage = (value - min) / (max - min);
-    let position = percentage * (sliderHeight - 40);
+    let position = percentage * (sliderHeight - 24);
     bee.style.top = position + "px";
     sliderFill.style.height = (sliderHeight - position) + "px";
 }
