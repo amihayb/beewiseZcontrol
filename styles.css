@@ -1,0 +1,250 @@
+body {
+  font-family: "Roboto", sans-serif;
+  
+  margin: 10px auto;
+  max-width: 450px;
+  padding: 20px 12px 10px 20px;
+  color: #344563;
+  background-color: #f5f5dc;
+}
+
+.button {
+  background: #feba12;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  min-width: 120px;
+}
+
+.button.active {
+  background: #f9d97c;
+}
+
+.button:hover {
+  background-color: #f9d97c;
+}
+
+.head-button {
+  font-size: 32px;
+  width: 200px;
+  display: block;
+}
+
+.go-button {
+  font-size: 20px;
+  width: 50%;
+}
+
+.demo-button {
+  font-size: 16px;
+  width: 90px;
+  transform: none;
+}
+
+.right-buttons {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  align-items: center;
+}
+
+.input-group {
+  margin: 30px 0px;
+  border: 2px solid #c8d4e3;
+  border-radius: 5px;
+  padding: 6px;
+  height: 80%;
+  background-color: #f5f5dc;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.input-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-label {
+  width: 50%;
+  height: 24px;
+}
+
+.txt_input {
+  width: 40%;
+  text-align: center;
+  height: 24px;
+}
+
+.text_input:focus {
+  -moz-box-shadow: 0 0 8px #88D5E9;
+  -webkit-box-shadow: 0 0 8px #88D5E9;
+  box-shadow: 0 0 8px #88D5E9;
+  border: 1px solid #88D5E9;
+}
+
+#consoleInput {
+  border: 1px solid black; 
+  padding: 2px; 
+  width: 100%;
+  height: auto;
+  text-align: left;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 6px;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+  padding: 8px;
+}
+
+li {
+  padding: 0;
+  list-style: none;
+  display: inline;
+  margin-bottom: 10px;
+}
+
+.modal {
+  display: none;
+  /* Hide the modal by default */
+  /*position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  padding-top: 90px;
+  padding-left: 310px;*/
+}
+
+/*.sin-modal .modal-content {
+  position: absolute;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 400px;
+  text-align: center; /* Center content */
+/*  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}
+
+.sin-modal .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+*/
+.sin-modal .close:hover,
+.sin-modal .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+.beeslider-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  padding: 0px;
+  flex-wrap: wrap;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.slider-container {
+  position: relative;
+  height: 300px;
+  width: 70px;
+}
+
+.slider-track {
+  position: absolute;
+  left: 20px;
+  width: 10px;
+  height: 100%;
+  background: #444;
+  border-radius: 5px;
+}
+
+.slider-fill {
+  position: absolute;
+  left: 20px;
+  width: 10px;
+  background: #daa520;
+  border-radius: 5px;
+  bottom: 0;
+}
+
+.slider-ticks {
+  position: absolute;
+  left: 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tick {
+  width: 10px;
+  height: 2px;
+  background: black;
+}
+
+.bee {
+  position: absolute;
+  left: 5px;
+  width: 40px;
+  height: 40px;
+  background: yellow;
+  border-radius: 50%;
+  border: 2px solid black;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  cursor: grab;
+}
+
+.input-container {
+  margin-top: 20px;
+  margin-left: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#valueInput {
+  font-size: 1.5em;
+  margin-top: 10px;
+  width: 80px;
+  text-align: center;
+}

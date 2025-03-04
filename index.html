@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beewise Z Control</title>
+  <link href="styles.css" rel="stylesheet">
+  <link rel="icon" href="assets/logo-blau-robotics.ico" />
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"> -->
+</head>
+
+<body>
+  <li><img width="100%" src="./assets/beewise_logo.png" alt="Beewise" onclick="playTune()"></li><br><br><br>
+  <li><img width="100%" src="./assets/logo-title.svg" alt="Blau Robotics"></li>
+  <div class="break"></div>
+  <div class="break"></div>
+
+  <div id="showAnglesGroup" class="input-group">
+    <div class="input-header">Driver Status:</div>
+    <div class="break"></div>
+    <div class="input-label">Position [mm]:</div>
+    <input id="input-position" class="txt_input" contenteditable="true" value="0"
+      style="border: 1px solid black; padding: 2px;"></input><br>
+    <div class="break"></div>
+    <div class="input-label">Velocity [mm/s]:</div>
+    <input id="input-velociy" class="txt_input" contenteditable="true" value="0"
+      style="border: 1px solid black; padding: 2px;"></input><br>
+    <div class="break"></div>
+    <div class="input-label">Motor Current [A]:</div>
+    <input id="input-current" class="txt_input" contenteditable="true" value="0"
+      style="border: 1px solid black; padding: 2px;"></input><br><br>
+  </div>
+
+  <div class="break"></div>
+  <div class="break"></div>
+
+  <div class="beeslider-wrapper">
+    <div class="button-container">
+      <button class="button" onclick="homing(this)">Homing</button>
+      <button class="button" onclick="goToPosition(this)">Position</button>
+      <button class="button" onclick="moveAbit(this, 'up')">Up</button>
+      <button class="button" onclick="moveAbit(this, 'down')">Down</button>
+      <button class="button" onclick="sineShake(this)">Sine</button>
+      <button class="button" onclick="runMCT(this)">MCT</button>
+    </div>
+    <div class="slider-container">
+      <div class="slider-track"></div>
+      <div class="slider-fill" id="sliderFill"></div>
+      <div class="slider-ticks">
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+        <div class="tick"></div>
+      </div>
+      <div class="bee" id="bee">🐝</div>
+    </div>
+    <!-- Right side buttons and input -->
+  <div class="right-buttons">
+    <button class="button" id="connectButton" onclick="openClosePort(event)">Connect</button>
+    <button class="button" id="motorOnButton" onclick="motorState(this)">Motor Off</button>
+    <div class="input-container">
+      <div>Position [mm]:</div>
+      <input type="number" id="valueInput" min="0" max="400" value="200">
+    </div>
+  </div>
+</div>
+<div id="consoleGroup" class="input-group">
+  <div class="input-header">Console:</div>
+  <textarea id="consoleInput" class="txt_input" rows="10"></textarea>
+  <button class="button" onclick="sendConsoleMessage()">Send</button>
+</div>
+<!-- From here down is for future use -->
+  <div style="display: none">
+  <button class="button demo-button" onclick="openModal('sine')">Sine Move</button>
+  <button class="button demo-button" onclick="openModal('repeat')">Repeat Move</button>
+</div>
+  <div id="Sine-group-modal" class="modal"
+    style="display: none; position: relative; border: 1px solid #ddd; background-color: white; padding: 10px; margin-top: 5px;">
+    <div class="row" style="max-width:400px">
+      <div class="column" style="width:50%">
+        <div id="SineTrsGroup" class="input-group">
+          <div class="input-header">Traverse Sine:</div>
+          <div class="break"></div>
+          <div class="input-label">Frq [Hz]:</div>
+          <input id="sineFrqTr-input" class="txt_input" contenteditable="true" value="0.1"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+          <div class="break"></div>
+          <div class="input-label">Amp [deg]:</div>
+          <input id="sineAmpTr-input" class="txt_input" contenteditable="true" value="10"
+            style="border: 1px solid black; padding: 2px;"></input><br><br>
+          <button class="button go-button" onclick="sineMove('Tr')">GO</button>
+        </div>
+      </div>
+      <div class="column" style="width:50%">
+        <div id="SineElGroup" class="input-group">
+          <div class="input-header">Elevation Sine:</div>
+          <div class="break"></div>
+          <div class="input-label">Frq [Hz]:</div>
+          <input id="sineFrqEl-input" class="txt_input" contenteditable="true" value="0.3"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+          <div class="break"></div>
+          <div class="input-label">Amp [deg]:</div>
+          <input id="sineAmpEl-input" class="txt_input" contenteditable="true" value="3"
+            style="border: 1px solid black; padding: 2px;"></input><br><br>
+          <button class="button go-button" onclick="sineMove('El')">GO</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="Repeat-group-modal" class="modal"
+    style="display: none; position: relative; border: 1px solid #ddd; background-color: white; padding: 10px; margin-top: 5px;">
+    <div class="row" style="max-width:400px">
+      <div class="column" style="width:50%">
+        <div id="RepeatTrsGroup" class="input-group">
+          <div class="input-header">Traverse Range:</div>
+          <div class="break"></div>
+          <div class="input-label">Min [deg]:</div>
+          <input id="repeatTrMin-input" class="txt_input" contenteditable="true" value="-45"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+          <div class="break"></div>
+          <div class="input-label">Max [deg]:</div>
+          <input id="repeatTrMax-input" class="txt_input" contenteditable="true" value="45"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+          <div class="break"></div>
+          <div class="input-label">Velocity [deg/s]:</div>
+          <input id="repeatTrVel-input" class="txt_input" contenteditable="true" value="10"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+        </div>
+      </div>
+      <div class="column" style="width:50%">
+        <div id="RepeatElGroup" class="input-group">
+          <div class="input-header">Elevation Range:</div>
+          <div class="break"></div>
+          <div class="input-label">Min [deg]:</div>
+          <input id="repeatElMin-input" class="txt_input" contenteditable="true" value="-5"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+          <div class="break"></div>
+          <div class="input-label">Max [deg]:</div>
+          <input id="repeatElMax-input" class="txt_input" contenteditable="true" value="30"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+          <div class="break"></div>
+          <div class="input-label">Velocity [deg/s]:</div>
+          <input id="repeatElVel-input" class="txt_input" contenteditable="true" value="10"
+            style="border: 1px solid black; padding: 2px;"></input><br>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="max-width:300px">
+      <div class="column" style="width:100%">
+        <div class="input-label" style="width: 100%;">Number of Iterations:</div>
+        <input id="repeatIter-input" class="txt_input" contenteditable="true" value="5"
+          style="border: 1px solid black; padding: 2px; width: 100%;"></input><br><br>
+        <button class="button go-button" id="repeatButton" onclick="repeatMove()">GO</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="localAudio">
+    <source src="assets/minimal-ping.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="scripts.js"></script>
+</body>
+
+</html>
